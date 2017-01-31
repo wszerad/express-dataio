@@ -54,3 +54,4 @@ Temporary Items
 .idea/vcs.xml
 .idea/workspace.xml
 .idea/watcherTasks.xml
+/node_modules/
