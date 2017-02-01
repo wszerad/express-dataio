@@ -47,12 +47,9 @@ class Reply {
 	}
 
 	error() {
-		return this.ResponseError(...arguments);
-	}
-
-	resError() {
 		return this.next(new ResponseError(...arguments));
 	}
+
 }
 
 module.exports = Reply;

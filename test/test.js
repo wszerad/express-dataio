@@ -1,37 +1,57 @@
-let express = require('express'),
+let prepare = require('./prepare'),
 	request = require('request'),
 	assert = require('assert'),
-	body = require('body-parser'),
-	router = require('express').Router(),
-	routes = require('./routes'),
-	wrapper = require('../index'),
-	app = express(),
 	opt = {
 		error: {
 			redirect: false
 		}
 	};
 
-//before(function () {
-	app.set('debug', true);
-	app.use(body.json());
-	routes(router);
-	app.use(wrapper(router, opt));
+before(function () {
+	prepare(opt);
+});
 
-	let host, port;
-	let server = app.listen(3000, () => {
-		host = server.address().address;
-		port = server.address().port;
-		console.log(host, port);
-	});
-//});
-
-/*
-describe('#find()', function() {
-	it('respond with matching records', function(done) {
+describe('xhr', function() {
+	it('not found', function(done) {
 		request.get('notFound', function (err, response, body) {
-			assert.equal()
-			done();
+			request.get({
+				url: 'http://127.0.0.1:3000/not-found',
+				headers: {
+					'X-Requested-With': 'XMLHttpRequest'
+				},
+				json: true
+			}, function (err, response, body) {
+				assert.equal(body, {message: 'Not Found', model: {}, status: 'error', stack: null});
+				done();
+			});
 		});
 	});
-});*/
+
+	it('not found', function(done) {
+		request.get('notFound', function (err, response, body) {
+			request.get({
+				url: 'http://127.0.0.1:3000/custom-error',
+				headers: {
+					'X-Requested-With': 'XMLHttpRequest'
+				},
+				json: true
+			}, function (err, response, body) {
+				assert.equal(body, {message: 'Not Found', model: {}, status: 'error', stack: null});
+				done();
+			});
+		});
+	});
+});
+
+describe('basic', function() {
+	it('not found', function(done) {
+		request.get('notFound', function (err, response, body) {
+			request.get({
+				url: 'http://127.0.0.1:3000/not-found'
+			}, function (err, response, body) {
+				assert.equal(body, 'Not Found');
+				done();
+			});
+		});
+	});
+});
