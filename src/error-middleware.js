@@ -9,7 +9,7 @@ module.exports = function (opt = {}) {
 			message = 'Internal Error',
 			stack = isDebug ? err.stack || null : null,
 			model = err.model || {},
-			status = 500;
+			status = err.status || 500;
 
 		if (err instanceof ResponseError) {
 			message = err.message;
