@@ -1,10 +1,10 @@
 const ValidationError = require('./models/ValidationError');
-const ajv = require('ajv')({
-		v5: true
-	});
 
 module.exports = function (opt) {
-	let validators = {};
+	let ajv = require('ajv')({
+			v5: true
+		}),
+		validators = {};
 
 	Object.keys(opt.definitions).forEach((def)=>{
 		ajv.addSchema(opt.definitions[def], def);
