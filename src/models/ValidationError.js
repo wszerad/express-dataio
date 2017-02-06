@@ -4,7 +4,7 @@ class ValidationError extends Error {
 
 		this.name = 'ValidationError';
 		this.status = 400;
-		this.model = model;
+		this.model = Object.assign(model, {error: message});
 		this.stack = (new Error()).stack;
 	}
 }
