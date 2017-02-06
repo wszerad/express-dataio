@@ -19,7 +19,7 @@ module.exports = function (opt) {
 	return function(required, optional, skipValidation) {
 		return function (req, res, next) {
 			let store = req.store = {},
-				path, error;
+				path, error, value;
 
 			if (Array.isArray(required)) {
 				required.some((arg)=> {
@@ -33,6 +33,7 @@ module.exports = function (opt) {
 
 					if (!skipValidation) {
 						path = arg;
+						value = store[arg];
 						return error = validators[arg](store[arg]);
 					}
 				});
@@ -48,13 +49,15 @@ module.exports = function (opt) {
 
 					if (!skipValidation && store[arg] !== undefined && store[arg] !== null) {
 						path = arg;
+						value = store[arg];
 						return error = validators[arg](store[arg]);
 					}
 				});
 
 			if (error) {
 				error.dataPath = path;
-				return next(new ValidationError(error, {path}));
+				error.value = value;
+				return next(new ValidationError(error.message, error));
 			}
 
 			next();
