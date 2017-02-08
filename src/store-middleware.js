@@ -32,6 +32,10 @@ module.exports = function (opt) {
 					}
 
 					if (!skipValidation) {
+						if(!validators[arg]) {
+							return res.reply.error(500, 'Unknown data field: ' + arg);
+						}
+
 						path = arg;
 						value = store[arg];
 						return error = validators[arg](store[arg]);
@@ -48,6 +52,10 @@ module.exports = function (opt) {
 					}
 
 					if (!skipValidation && store[arg] !== undefined && store[arg] !== null) {
+						if(!validators[arg]) {
+							return res.reply.error(500, 'Unknown data field: ' + arg);
+						}
+
 						path = arg;
 						value = store[arg];
 						return error = validators[arg](store[arg]);
