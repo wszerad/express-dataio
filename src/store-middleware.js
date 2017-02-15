@@ -1,9 +1,10 @@
 const ValidationError = require('./models/ValidationError');
 
 module.exports = function (opt) {
-	let ajv = require('ajv')({
+	let ajvOpt = Object.assign({
 			v5: true
-		}),
+		}, opt.ajv || {}),
+		ajv = require('ajv')(ajvOpt),
 		validators = {};
 
 	Object.keys(opt.definitions).forEach((def)=>{
